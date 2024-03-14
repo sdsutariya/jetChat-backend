@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import connectdb from './connecctdb.js';
 import cors from "cors";
 import userRoutes from './routes/userRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
 const app = express();
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/user", userRoutes);
-// app.use("/api/chat", chatRoutes);
+app.use("/api/chat", chatRoutes);
 // app.use("/api/message", messageRoutes);
 
 app.use(notFound);
