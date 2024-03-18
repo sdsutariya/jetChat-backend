@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
-import Chat from "../models/chatModel";
-import User from "../models/userModel";
+import Chat from "../models/chatModel.js";
+import User from "../models/userModel.js";
 
 //@description     Create or fetch One to One Chat
 //@route           POST /api/chat/

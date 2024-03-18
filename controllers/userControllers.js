@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
-import { User } from "../models/userModel.js";
-import { generateToken } from '../generateToken.js'
+import User from "../models/userModel.js";
+import { generateToken } from '../generateToken.js';
+import bcrypt from "bcryptjs";
 
 //@description     Get or Search all users
 //@route           GET /api/user?search=
@@ -23,8 +24,9 @@ export const allUsers = asyncHandler(async (req, res) => {
 //@route           POST /api/user/
 //@access          Public
 export const registerUser = asyncHandler(async (req, res) => {
-
-    const { name, email, password, pic } = req.body;
+    try {
+        
+    let { name, email, password, pic } = req.body;
 
     if (!name || !email || !password) {
         res.status(400);
@@ -37,7 +39,8 @@ export const registerUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("User already exists");
     }
-
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
     const user = await User.create({
         name,
         email,
@@ -58,6 +61,10 @@ export const registerUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("User not found");
     }
+} catch (error) {
+ console.log("registerUser >> error",error);    
+ return error;   
+}
 
 })
 
@@ -68,8 +75,7 @@ export const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-
-    if (user && (await user.matchPassword(password))) {
+    if (user && (await bcrypt.compare(password,user.password))) {
         res.json({
             _id: user._id,
             name: user.name,

@@ -6,8 +6,8 @@ import {
   removeFromGroup,
   addToGroup,
   renameGroup,
-} from "../controllers/chatControllers";
-import { protect } from "../middlewares/authMiddleware";
+} from "../controllers/chatControllers.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
